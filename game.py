@@ -4,6 +4,18 @@ import pygame
 import sys
 import config # Import the config module 
 
+# -- Draw Text -- #
+def draw_text(screen, text, x, y, font_size, color, font_name=None, bold=False, italic=False):
+   if font_name: 
+      font = pygame.font.Font(font_name, font_size)
+   else:
+      font = pygame.font.Font(None, font_size)
+
+   font.set_bold(bold)
+   font.set_italic(italic)
+   text_surface = font.render(text, True, color)
+   screen.blit(text_surface, (x, y))
+
 # -- initilize -- #
 def init_game (): 
     pygame.init()
@@ -22,29 +34,27 @@ def handle_events ():
     return True
 
 
-# -- Draw Circle -- #
-def draw_circle(screen, center, radius, color, thickness):
-    # --- Draw circle on window --- #
-    pygame.draw.circle(screen, color, center, radius, thickness)
-
-
-# -- Draw Rectangle -- #
-def draw_rectangle(screen, rect, color, thickness, border_radius):
-    # --- Draw rect on window --- #
-    pygame.draw.rect(screen, color, rect, thickness, border_radius)
-
-
-# -- Draw Polygon -- #
-def draw_poly(screen, color, points,thickness):
-    # --- Draw polygon on window --- #
-    pygame.draw.polygon(screen, color, points,thickness)
-
-
-
 # -- Main -- #
 def main():
    screen = init_game()
    clock = pygame.time.Clock() # Initialize the clock here
+
+   
+   # -- Define Shape --#
+   shape = "o"
+   font_size1 = 48
+   color1 = config.WHITE
+   x1, y1 = (20000, 25000)
+
+   # -- Define Text -- #
+   text2 = "Press anywhere on the screen to continue!"
+   font_size2 = 20
+   color2 = config.WHITE
+
+   text3 = "Fly Around!"
+   font_size3 = 25
+   color3 = config.WHITE
+   x2, y2 = (20000, 25000)
 
 
 
@@ -52,38 +62,33 @@ def main():
    while running:
       running = handle_events()
 
+      screen.fill(config.BLACK) # Use color from config
+
+      # -- If Press Anywhere -- #
+      if pygame.mouse.get_pressed()[0] == True:
+         text2 = ""
+         x1, y1 = (375, 300)
+         x2, y2 = (335, 200)
+
       # -- Handle Key Pressed For Movement -- #
+      keys = pygame.key.get_pressed()
+      if keys [pygame.K_UP]:
+         y1 -=5 # Move Up
+      if keys [pygame.K_DOWN]:
+         y1 +=5 # Move Down
+      if keys [pygame.K_LEFT]:
+         x1 -= 5 # Move Left
+      if keys [pygame.K_RIGHT]:
+         x1 +=5 # Move Right
 
-      screen.fill(config.WHITE) # Use color from config
+      
 
-      #-- Click Icon --#
-      if pygame.mouse.get_pressed()[0] == False:
+      # -- Draw Shape On Screen -- # 
+      draw_text(screen, shape, x1, y1, font_size1, color1)
 
-         # --- Circle Drawn out line --- #
-         circle_center = (370, 295)
-         circle_radius = 100
-         circle_color = config.BLACK
-         circle_thick = 4
-         draw_circle(screen, circle_center, circle_radius, circle_color, circle_thick)
-
-         # --- triangle Drawn --- #
-         points = [(340, 250), #top left
-                     (340, 340), #bottom left
-                     (430, 300)  #right
-                     ]
-         thickness = 0
-         draw_poly(screen, config.BLACK, points,thickness)
-
-         # --- triangle Drawn outline --- #
-         points = [(340, 250), #top left
-                     (340, 340), #bottom left
-                     (430, 300)  #right
-                     ]
-         thickness = 4
-         draw_poly(screen, config.WHITE, points,thickness)
-
-
-
+      # -- Draw Other Text On Screen -- # 
+      draw_text(screen, text2, 240, 300, font_size2, color2)
+      draw_text(screen, text3, x2, y2, font_size3, color3)
 
 
 
